@@ -4,11 +4,12 @@ import 'package:intl/intl.dart';
 //import 'package:time_picker_widget/main.dart';
 
 void main() {
-  runApp(const MathClassBookingApp());
+  runApp(MathClassBookingApp());
 }
 
 class MathClassBookingApp extends StatelessWidget {
-  const MathClassBookingApp({super.key});
+  //const MathClassBookingApp({super.key});
+  //bool loggedIn = false;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class MathClassBookingApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.pinkAccent),
        // useMaterial3: true,
       ),
-      home: BookingScreen(),
+      home: LoginOrRegisterScreen(),
     );
   }
 }
@@ -137,6 +138,120 @@ class ConfirmationScreen extends StatelessWidget {
     );
   }
 
+}
 
+class LoginOrRegisterScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Login or Register'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                // Przejdź do ekranu logowania
+                Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+              },
+              child: Text('Log In'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Przejdź do ekranu rejestracji
+                Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen()));
+              },
+              child: Text('Register'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+class LoginScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Login'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Username'),
+            ),
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Password'),
+              obscureText: true,
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Implement logic for user login here
+              },
+              child: Text('Log In'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
+class RegisterScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Register'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              // Formularz rejestracji
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Create Username'),
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Create Password'),
+                obscureText: true,
+              ),
+              SizedBox(height: 20),
+              // Przycisk do rejestracji
+              ElevatedButton(
+                onPressed: () {
+                  // Implementuj logikę rejestracji
+                  // ...
+                },
+                child: Text('Register'),
+              ),
+
+              SizedBox(height: 20),
+
+              // Przycisk do powrotu do ekranu logowania
+              TextButton(
+                onPressed: () {
+                  // Przejdź do ekranu logowania
+                  //Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                    Navigator.pop(context);
+                },
+                child: Text('Already have an account? Log in here.'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
