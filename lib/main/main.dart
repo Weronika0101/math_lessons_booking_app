@@ -1,9 +1,27 @@
+import 'package:booking_app/firebase_options.dart';
+import 'package:booking_app/services/firebase_auth_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 //import 'package:time_picker_widget/time_picker_widget.dart';
 //import 'package:time_picker_widget/main.dart';
 
-void main() {
+void main() async {
+  //Logger.level = Level.verbose;
+  WidgetsFlutterBinding.ensureInitialized();
+  print('starting app');
+  try {
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+  } catch (e) {}
+  print('firebase inited');
+
+
+  //await Firebase.initializeApp(
+   // options: DefaultFirebaseOptions.currentPlatform,
+ // );
   runApp(MathClassBookingApp());
 }
 
@@ -24,6 +42,8 @@ class MathClassBookingApp extends StatelessWidget {
   }
 }
 class BookingScreen extends StatefulWidget {
+  const BookingScreen({super.key});
+
   @override
   _BookingScreenState createState() => _BookingScreenState();
 }
@@ -61,7 +81,7 @@ class _BookingScreenState extends State<BookingScreen> {
     return Scaffold(
       appBar: AppBar(
        // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text('Book Math Class'),
+        title: const Text('Book Math Class'),
       ),
       body: Center(
         child: Column(
@@ -71,14 +91,14 @@ class _BookingScreenState extends State<BookingScreen> {
               _selectedDate == null
                   ? 'Select a date and time for your math class:'
                   : 'Selected Date and Time:  ${DateFormat('dd/MM/yyyy').format(_selectedDate!)} ${_selectedTime?.format(context)}',
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18),
             ),
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
             ElevatedButton(
                 onPressed: () => _selectDateAndTime(context),
-                child: Text('Pick a Date and Time'),
+                child: const Text('Pick a Date and Time'),
             ),
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
             if (_selectedDate != null)
               ElevatedButton(
                 onPressed: () {
@@ -91,7 +111,7 @@ class _BookingScreenState extends State<BookingScreen> {
                   ),
                     ),
                   );
-                }, child: Text('Confirm Booking'),
+                }, child: const Text('Confirm Booking'),
               )
 
           ],
@@ -105,7 +125,7 @@ class ConfirmationScreen extends StatelessWidget {
   final DateTime selectedDate;
   final TimeOfDay selectedTime;
 
-  ConfirmationScreen({
+  ConfirmationScreen({super.key,
     required this.selectedDate,
     required this.selectedTime,
   });
@@ -114,23 +134,23 @@ class ConfirmationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Booking Confirmation'),
+        title: const Text('Booking Confirmation'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            const Text(
               'You have booked a math class on:',
               style: TextStyle(fontSize: 18),
             ),
             Text(
               DateFormat('dd/MM/yyyy').format(selectedDate),
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             Text(
               'Time: ${selectedTime.format(context)}',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)
             )
           ],
         ),
@@ -145,7 +165,7 @@ class LoginOrRegisterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login or Register'),
+        title: const Text('Login or Register'),
       ),
       body: Center(
         child: Column(
@@ -154,17 +174,17 @@ class LoginOrRegisterScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 // Przejdź do ekranu logowania
-                Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
               },
-              child: Text('Log In'),
+              child: const Text('Log In'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 // Przejdź do ekranu rejestracji
-                Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => EmailPasswordSignup()));
               },
-              child: Text('Register'),
+              child: const Text('Register'),
             ),
           ],
         ),
@@ -173,11 +193,13 @@ class LoginOrRegisterScreen extends StatelessWidget {
   }
 }
 class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: const Text('Login'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -185,18 +207,18 @@ class LoginScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             TextFormField(
-              decoration: InputDecoration(labelText: 'Username'),
+              decoration: const InputDecoration(labelText: 'Username'),
             ),
             TextFormField(
-              decoration: InputDecoration(labelText: 'Password'),
+              decoration: const InputDecoration(labelText: 'Password'),
               obscureText: true,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 // Implement logic for user login here
               },
-              child: Text('Log In'),
+              child: const Text('Log In'),
             ),
           ],
         ),
@@ -204,13 +226,31 @@ class LoginScreen extends StatelessWidget {
     );
   }
 }
+class EmailPasswordSignup extends StatefulWidget {
+  static String routeName = '/signup-email-password';
+  const EmailPasswordSignup({Key? key}) : super(key: key);
 
-class RegisterScreen extends StatelessWidget {
+  @override
+  _EmailPasswordSignupState createState() => _EmailPasswordSignupState();
+}
+
+class _EmailPasswordSignupState extends State<EmailPasswordSignup> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  void signUpUser() async {
+    FirebaseAuthMethods(FirebaseAuth.instance).signUpWithEmail(
+      email: emailController.text,
+      password: passwordController.text,
+      context: context,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Register'),
+        title: const Text('Register'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -221,23 +261,22 @@ class RegisterScreen extends StatelessWidget {
             children: <Widget>[
               // Formularz rejestracji
               TextFormField(
-                decoration: InputDecoration(labelText: 'Create Username'),
+                controller: emailController,
+                decoration: const InputDecoration(labelText: 'Enter your email'),
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Create Password'),
-                obscureText: true,
+                  controller: passwordController,
+                  decoration: const InputDecoration(labelText: 'Create Password'),
+                  obscureText: true,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               // Przycisk do rejestracji
               ElevatedButton(
-                onPressed: () {
-                  // Implementuj logikę rejestracji
-                  // ...
-                },
-                child: Text('Register'),
+                onPressed: signUpUser,
+                child: const Text('Register'),
               ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Przycisk do powrotu do ekranu logowania
               TextButton(
@@ -246,7 +285,7 @@ class RegisterScreen extends StatelessWidget {
                   //Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
                     Navigator.pop(context);
                 },
-                child: Text('Already have an account? Log in here.'),
+                child: const Text('Already have an account? Log in here.'),
               ),
             ],
           ),
